@@ -1,24 +1,28 @@
-System.RunApplication.RunApplication ApplicationPath: $'''\"C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE\"''' WindowStyle: System.ProcessWindowStyle.Normal ProcessId=> AppProcessId
+SET YourEmailAddress TO $'''cnvhm5u9vi@pomail.net'''
+SET YourFromAddress TO $'''a.pettit@unsw.edu.au
+'''
 Outlook.Launch Instance=> OutlookInstance
-Outlook.SendEmailThroughOutlook.SendEmail Instance: OutlookInstance Account: $'''unihirebot@unsw.edu.au''' SendTo: $'''cnvhm5u9vi@pomail.net''' Subject: $'''Searching for game''' Body: $'''Searching for dota game''' IsBodyHtml: True
+Outlook.SendEmailThroughOutlook.SendEmail Instance: OutlookInstance Account: YourFromAddress SendTo: YourEmailAddress Subject: $'''Searching for game''' Body: $'''Searching for dota game''' IsBodyHtml: True
+ON ERROR
+
+END
 UIAutomation.FocusWindow.FocusByTitleClass Title: $'''Dota 2''' Class: $'''SDL_app'''
 ON ERROR
 
 END
-DateTime.GetCurrentDateTime.Local DateTimeFormat: DateTime.DateTimeFormat.DateAndTime CurrentDateTime=> CurrentDateTime
-File.WriteText File: $'''C:\\Users\\Ash\\OneDrive - UNSW\\Desktop\\Dotalog.txt''' TextToWrite: $'''%CurrentDateTime% - Dota Ready is running''' AppendNewLine: True IfFileExists: File.IfFileExists.Overwrite Encoding: File.FileEncoding.Unicode
 LABEL LookForReady
-UIAutomation.CloseWindow.CloseByTitleClass Title: $'''''' Class: $'''Notepad'''
-ON ERROR
-
-END
-System.RunApplication.RunApplication ApplicationPath: $'''C:\\Users\\Ash\\OneDrive - UNSW\\Desktop\\Dotalog.txt''' WindowStyle: System.ProcessWindowStyle.Normal ProcessId=> AppProcessId
 WAIT (OCR.WaitForTextOnScreen.TextOnSubregionOfScreenToAppearWithTesseract TextToFind: $'''YOUR GAME IS READY''' IsRegex: False Language: OCR.TesseractLanguage.English SearchForTextOn: OCR.SearchTarget.ForegroundWindow ImageWidthMultiplier: 1 ImageHeightMultiplier: 1 X1: 1513 Y1: 687 X2: 2328 Y2: 1013 TextLocationX=> LocationOfTextFoundX2 TextLocationY=> LocationOfTextFoundY2) FOR 300000 
 ON ERROR
     GOTO LookForReady
 END
 MouseAndKeyboard.SendMouseClick.ClickAt ClickType: MouseAndKeyboard.MouseClickType.LeftClick MillisecondsDelay: 0 X: LocationOfTextFoundX2 + 50 Y: LocationOfTextFoundY2 + 300 RelativeTo: MouseAndKeyboard.PositionRelativeTo.ActiveWindow MovementStyle: MouseAndKeyboard.MovementStyle.Instant
-Outlook.SendEmailThroughOutlook.SendEmail Instance: OutlookInstance Account: $'''unihirebot@unsw.edu.au''' SendTo: $'''cnvhm5u9vi@pomail.net''' Subject: $'''Your Dota Game is Ready''' Body: $'''Should I click in?''' IsBodyHtml: True
+Outlook.SendEmailThroughOutlook.SendEmail Instance: OutlookInstance Account: $'''unihirebot@unsw.edu.au''' SendTo: YourEmailAddress Subject: $'''Your Dota Game is Ready''' Body: $'''Should I click in?''' IsBodyHtml: True
+ON ERROR
+
+END
 WAIT 5
-Outlook.SendEmailThroughOutlook.SendEmail Instance: OutlookInstance Account: $'''unihirebot@unsw.edu.au''' SendTo: $'''cnvhm5u9vi@pomail.net''' Subject: $'''Your Dota Game is Ready''' Body: $'''Should I click in?''' IsBodyHtml: True
+Outlook.SendEmailThroughOutlook.SendEmail Instance: OutlookInstance Account: $'''unihirebot@unsw.edu.au''' SendTo: YourEmailAddress Subject: $'''Your Dota Game is Ready''' Body: $'''Should I click in?''' IsBodyHtml: True
+ON ERROR
+
+END
 GOTO LookForReady
